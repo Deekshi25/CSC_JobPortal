@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Portal - User Home</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="user.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo-section">
+            <i data-lucide="briefcase"></i>
+            <h1>Job Portal</h1>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-group">
+                <h2 class="nav-group-title">Main Menu</h2>
+                <a class="sidebar-link" data-section="dashboard">
+                    <i data-lucide="layout-dashboard"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a class="sidebar-link active" data-section="available-jobs">
+                    <i data-lucide="briefcase"></i>
+                    <span>Available Jobs (<span id="available-jobs-count">0</span>)</span>
+                </a>
+                <a class="sidebar-link" data-section="applied-jobs">
+                    <i data-lucide="check-circle"></i>
+                    <span>Applied Jobs (<span id="applied-jobs-count">0</span>)</span>
+                </a>
+                <a class="sidebar-link" data-section="saved-jobs">
+                    <i data-lucide="bookmark"></i>
+                    <span>Saved Jobs (<span id="sidebar-saved-jobs-count">0</span>)</span>
+                </a>
+            </div>
+
+            <div class="nav-group">
+                <h2 class="nav-group-title">Profile</h2>
+                <a class="sidebar-link" data-section="profile">
+                    <i data-lucide="user"></i>
+                    <span>My Profile</span>
+                </a>
+                <a class="sidebar-link" data-section="resume">
+                    <i data-lucide="file-text"></i>
+                    <span>Resume</span>
+                </a>
+                <a class="sidebar-link" data-section="notifications">
+                    <i data-lucide="bell"></i>
+                    <span>Notifications</span>
+                </a>
+            </div>
+
+            <div class="nav-group">
+                <h2 class="nav-group-title">Settings</h2>
+                <a class="sidebar-link" data-section="settings">
+                    <i data-lucide="settings"></i>
+                    <span>Account Settings</span>
+                </a>
+                <a class="sidebar-link" data-section="help">
+                    <i data-lucide="help-circle"></i>
+                    <span>Help Center</span>
+                </a>
+                <button onclick="handleLogout()" class="flex items-center space-x-1 px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600">
+                    <!-- <a href="https://us-east-1voysnbnuy.auth.us-east-1.amazoncognito.com/logout?client_id=3av39d75uhosq5qfil4ocrj1a1&redirect_uri=https://127.0.0.1:5500/callback.html&response_type=token&scope=aws.cognito.signin.user.admin+email+openid+phone+profile"/> -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
+                    </svg>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="user-section">
+            <div class="user-avatar">
+                <i data-lucide="user"></i>
+            </div>
+            <div class="user-info">
+                <div class="user-name"><span id="userName"></span></div>
+                <div class="user-role">Job Seeker</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../admin/adminhome.js"></script>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="dashboard-section">
+            <div class="main-header">
+                <h1 class="main-title">Dashboard</h1>
+            </div>
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i data-lucide="briefcase"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="total-jobs-count">0</h3>
+                        <p>Total Jobs</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i data-lucide="check-circle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="total-applications">0</h3>
+                        <p>Applied Jobs</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i data-lucide="bookmark"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="saved-jobs-count">0</h3>
+                        <p>Saved Jobs</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Available Jobs Section -->
+        <section id="available-jobs" class="available-jobs-section">
+            <div class="main-header">
+                <h1 class="main-title">Available Jobs</h1>
+                <div class="search-bar">
+                    <i data-lucide="search"></i>
+                    <input type="text" placeholder="Search for jobs..." id="job-search">
+                </div>
+            </div>
+            <div class="job-list" id="job-list"></div>
+        </section>
+
+        <!-- Applied Jobs Section -->
+        <section id="applied-jobs" class="applied-jobs-section" style="display: none;">
+            <div class="main-header">
+                <h1 class="main-title">Applied Jobs</h1>
+            </div>
+            <div class="job-list" id="applied-job-list"></div>
+        </section>
+
+        <!-- Saved Jobs Section -->
+        <section id="saved-jobs" class="saved-jobs-section">
+            <div class="main-header">
+                <h1 class="main-title">Saved Jobs</h1>
+            </div>
+            <div class="job-list" id="saved-jobs-list"></div>
+        </section>
+
+         <!-- Profile Section -->
+         <section id="profile" class="profile-section">
+            <div class="main-header">
+                <h1 class="main-title">My Profile</h1>
+            </div>
+            <div class="profile-header">
+                <div class="profile-avatar">
+                    <i data-lucide="user"></i>
+                </div>
+                <div class="profile-info">
+                    <h2>John Doe</h2>
+                    <p>Frontend Developer</p>
+                </div>
+            </div>
+            <form class="profile-form">
+                <div class="form-group">
+                    <label for="full-name">Full Name</label>
+                    <input type="text" id="full-name" value="John Doe">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" value="john@example.com">
+                </div>
+                <div class="form-group">
+                    <label for="bio">Bio</label>
+                    <textarea id="bio" rows="4">Frontend Developer with 5 years of experience...</textarea>
+                </div>
+                <button type="submit" class="apply-button">Save Changes</button>
+            </form>
+        </section>
+
+        <!-- Resume Section -->
+        <section id="resume" class="resume-section">
+            <div class="main-header">
+                <h1 class="main-title">Resume</h1>
+            </div>
+            <div class="resume-upload">
+                <i data-lucide="upload" size="48"></i>
+                <h3>Upload Your Resume</h3>
+                <p>Drag and drop your resume here or click to browse</p>
+                <input type="file" id="resume-file" accept=".pdf,.doc,.docx" style="display: none;">
+                <button class="apply-button" style="margin-top: 1rem;" onclick="document.getElementById('resume-file').click()">
+                    Upload Resume
+                </button>
+            </div>
+        </section>
+
+         <!-- Notifications Section -->
+         <section id="notifications" class="notifications-section">
+            <div class="main-header">
+                <h1 class="main-title">Notifications</h1>
+            </div>
+            <div id="notifications-list">
+                <!-- Notifications will be dynamically added here -->
+            </div>
+        </section>
+
+        <!-- Settings Section -->
+        <section id="settings" class="settings-section">
+            <div class="main-header">
+                <h1 class="main-title">Account Settings</h1>
+            </div>
+            <div class="settings-group">
+                <h3>Email Notifications</h3>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" checked> Job Application Updates
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" checked> New Job Matches
+                    </label>
+                </div>
+            </div>
+            <button class="apply-button">Save Settings</button>
+        </section>
+
+        <!-- Help Center Section -->
+        <section id="help" class="help-section">
+            <div class="main-header">
+                <h1 class="main-title">Help Center</h1>
+            </div>
+            <div class="help-card">
+                <h3>How to Apply for Jobs</h3>
+                <p>Find a job you're interested in and click the "Apply Now" button...</p>
+            </div>
+            <div class="help-card">
+                <h3>Managing Your Profile</h3>
+                <p>Keep your profile up to date to increase your chances of finding the right job...</p>
+            </div>
+        </section>
+    </main>
+
+    
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <i data-lucide="check-circle"></i>
+        <span id="toast-message"></span>
+    </div>
+
+    <script>
+        // Initialize Lucide icons
+       
+
+        lucide.createIcons();
+
+        // State management
+        let appliedJobs = [];
+        let savedJobs = [];
+        let allJobs = [];
+        const apiBaseUrl = 'https://7pk8ryh2ld.execute-api.us-east-1.amazonaws.com/stage1';
+        const userName = localStorage.getItem('userName');
+        console.log("USER NAME",userName);
+
+        // Update all job count displays
+        function updateJobCounts(total, applied, saved) {
+            // Update sidebar counts
+            document.getElementById('available-jobs-count').textContent = total;
+            document.getElementById('applied-jobs-count').textContent = applied;
+            document.getElementById('sidebar-saved-jobs-count').textContent = saved;
+            
+            // Update dashboard counts
+            document.getElementById('total-jobs-count').textContent = total;
+            document.getElementById('total-applications').textContent = applied;
+            document.getElementById('saved-jobs-count').textContent = saved;
+        }
+
+
+// Fetch all jobs
+async function fetchJobs() {
+    try {
+        const response = await fetch(`${apiBaseUrl}/admin/getAllJobs`);
+        const data = await response.json();
+        console.log("All Jobs Response:", data); // Debugging log
+
+        if (!data.body) {
+            console.warn('Received empty body from API');
+            allJobs = [];
+        } else {
+            try {
+                const parsedData = JSON.parse(data.body);
+                allJobs = parsedData.jobs || [];
+            } catch (parseError) {
+                console.error('Error parsing JSON:', parseError);
+                allJobs = [];
+            }
+        }
+        updateJobCounts(allJobs.length, appliedJobs.length, savedJobs.length);
+        return allJobs;
+    } catch (error) {
+        console.error('Error fetching jobs:', error);
+        showToast('Failed to load jobs');
+        return [];
+    }
+}
+
+// Fetch user's applied jobs
+async function fetchAppliedJobs() {
+    try {
+        console.log("Fetching applied jobs for:", userName);
+        const response = await fetch(`${apiBaseUrl}/user/getAppliedJobs?name=${userName}`);
+        const data = await response.json();
+        console.log("API Response Data:", data); // Debugging log
+
+        appliedJobs = data; // Ensure appliedJobs is always an array
+
+        console.log(appliedJobs)
+
+        updateJobCounts(allJobs.length, appliedJobs.length, savedJobs.length);
+        return appliedJobs;
+    } catch (error) {
+        console.error('Error fetching applied jobs:', error);
+        showToast('Failed to load applied jobs');
+        return [];
+    }
+}
+
+// Render all jobs
+function renderJobs() {
+    const jobList = document.getElementById('job-list');
+
+    if (!jobList) {
+        console.error("Element with ID 'job-list' not found!");
+        return;
+    }
+
+    jobList.innerHTML = allJobs.map(job => createJobCard(job)).join('');
+
+    lucide.createIcons();
+}
+
+// Render applied jobs
+function renderAppliedJobs() {
+    const appliedJobsList = document.getElementById("applied-job-list");
+    if (!appliedJobsList) {
+        console.error("Element with ID 'applied-job-list' not found!");
+        return;
+    }
+
+    // Ensure appliedJobs contains full job objects, not just job IDs
+    appliedJobsList.innerHTML = appliedJobs.map(job => createJobCard(job)).join('');
+
+    lucide.createIcons();
+}
+
+        // Fetch all jobs
+//         async function fetchJobs() {
+//             try {
+//                 const response = await fetch(`${apiBaseUrl}/admin/getAllJobs`);
+//                 const data = await response.json();
+//                 if (!data.body) {
+//                     console.warn('Received empty body from API');
+//                     allJobs = [];
+//                 } else {
+//                     try {
+//                         const parsedData = JSON.parse(data.body);
+//                         allJobs = parsedData.jobs || [];
+//                     } catch (parseError) {
+//                         console.error('Error parsing JSON:', parseError);
+//                         allJobs = [];
+//                     }
+//                 }
+//                 updateJobCounts(allJobs.length, appliedJobs.length, savedJobs.length);
+//                 return allJobs;
+//             } catch (error) {
+//                 console.error('Error fetching jobs:', error);
+//                 showToast('Failed to load jobs');
+//                 return [];
+//             }
+//         }
+
+//         // Fetch user's applied jobs
+//         async function fetchAppliedJobs() {
+//     try {
+//         console.log(userName);
+//         const response = await fetch(`${apiBaseUrl}/user/getAppliedJobs?name=${userName}`);
+//         console.log(response);
+
+//         const data = await response.json(); // Parse JSON response
+//         console.log("API Response Data:", data); // Debugging log
+
+//         // Use data directly, assuming it's already JSON
+//         appliedJobs = data.jobs || [];
+
+//         updateJobCounts(allJobs.length, appliedJobs.length, savedJobs.length);
+//         return appliedJobs;
+//     } catch (error) {
+//         console.error('Error fetching applied jobs:', error);
+//         showToast('Failed to load applied jobs');
+//         return [];
+//     }
+// }
+
+
+async function applyForJob(job) {
+    if (!job || !job.jobid) {
+        showToast('Invalid job data');
+        return;
+    }
+
+    try {
+        const response = await fetch(`${apiBaseUrl}/user/applyJob`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                name: userName,
+                jobid: job.jobid,
+                company: job.company,
+                location: job.location,
+                status: job.status,
+                title: job.title
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to apply for job');
+        }
+
+        // Update applied jobs
+        appliedJobs.push(job.jobid);
+        updateJobCounts(allJobs.length, appliedJobs.length, savedJobs.length);
+
+        showToast(`Successfully applied for ${job.title}!`);
+
+        // **Force UI Update without refresh**
+        updateJobUI(job.jobid);
+        renderAppliedJobs();
+
+    } catch (error) {
+        console.error('Error applying for job:', error);
+        showToast('Failed to apply for job');
+    }
+}
+
+ function updateJobUI(jobId) {
+    const jobCard = document.querySelector(`[data-job-id="${jobId}"]`);
+    if (jobCard) {
+        const applyButton = jobCard.querySelector('.apply-button');
+        if (applyButton) {
+            applyButton.textContent = 'Applied';
+            applyButton.classList.add('applied');
+            applyButton.disabled = true;
+        }
+    }
+} 
+
+        // Create job card
+        function createJobCard(job) {
+        const isApplied = appliedJobs.some(appliedJob => appliedJob.jobid === job.jobid);
+            console.log(appliedJobs)
+            const isSaved = savedJobs.includes(job.jobid);
+            
+            return `
+                <div class="job-card" data-job-id="${job.jobid}">
+                    <h3 class="job-title">${job.title}</h3>
+                    <p class="job-company">${job.company}</p>
+                    <div class="job-details">
+                        <span class="job-detail">
+                            <i data-lucide="map-pin"></i>
+                            ${job.location}
+                        </span>
+                        <span class="job-detail">
+                            <i data-lucide="clock"></i>
+                            ${job.status || 'Active'}
+                        </span>
+                    </div>
+                    <div class="job-tags">
+                        <span class="job-tag">${job.jobType || 'Full-time'}</span>
+                        ${job.remote ? '<span class="job-tag">Remote</span>' : ''}
+                    </div>
+                    <div class="job-actions">
+                        <button class="apply-button ${isApplied ? 'applied' : ''}" 
+                                onclick="applyForJob(${JSON.stringify(job).replace(/"/g, '&quot;')})"
+                                ${isApplied ? 'disabled' : ''}>
+                            ${isApplied ? 'Applied' : 'Apply Now'}
+                        </button>
+                        <button class="save-button ${isSaved ? 'saved' : ''}"
+                                onclick="toggleSaveJob(${JSON.stringify(job).replace(/"/g, '&quot;')})">
+                            <i data-lucide="${isSaved ? 'bookmark-check' : 'bookmark'}"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Toggle save job
+        function toggleSaveJob(job) {
+            const index = savedJobs.indexOf(job.jobid);
+            if (index === -1) {
+                savedJobs.push(job.jobid);
+                showToast(`Saved ${job.title}`);
+            } else {
+                savedJobs.splice(index, 1);
+                showToast(`Removed ${job.title} from saved jobs`);
+            }
+            updateJobCounts(allJobs.length, appliedJobs.length, savedJobs.length);
+            renderJobs();
+        }
+
+        // Render jobs
+        // function renderJobs() {
+        //     const jobList = document.getElementById('job-list');
+        //     const appliedJobsList = document.getElementById('applied-jobs-list');
+        //     const savedJobsList = document.getElementById('saved-jobs-list');
+
+        //     // Render all jobs
+        //     jobList.innerHTML = allJobs.map(job => createJobCard(job)).join('');
+
+        //     appliedJobsList.innerHTML = appliedJobs.map(job => createJobCard(job)).join('');
+        //     // Render applied jobs
+        //     appliedJobsList.innerHTML = allJobs
+        //         .filter(job => appliedJobs.includes(job.jobid))
+        //         .map(job => createJobCard(job))
+        //         .join('');
+
+        //     // Render saved jobs
+        //     savedJobsList.innerHTML = allJobs
+        //         .filter(job => savedJobs.includes(job.jobid))
+        //         .map(job => createJobCard(job))
+        //         .join('');
+
+        //     // Reinitialize Lucide icons
+        //     lucide.createIcons();
+        // }
+      // Notifications
+
+
+      function addNotification(message) {
+            const notification = {
+                id: notifications.length + 1,
+                message,
+                time: 'Just now'
+            };
+            notifications.unshift(notification);
+            renderNotifications();
+        }
+    
+        function renderNotifications() {
+            notificationsList.innerHTML = notifications.map(notification => `
+                <div class="notification-item">
+                    <div class="notification-icon">
+                        <i data-lucide="bell"></i>
+                    </div>
+                    <div>
+                        <p>${notification.message}</p>
+                        <small style="color: #6B7280">${notification.time}</small>
+                    </div>
+                </div>
+            `).join('');
+            
+            lucide.createIcons();
+        }
+    
+        // Toast notification
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toast-message');
+            toastMessage.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+    
+        // Initialize
+        async function initialize() {
+            document.getElementById('userName').textContent = userName;
+            await fetchJobs();
+            await fetchAppliedJobs();
+            renderJobs();
+            renderAppliedJobs();
+            renderNotifications();
+            showSection('dashboard');
+        }
+
+        // Navigation
+        const sections = document.querySelectorAll('section');
+        const sidebarLinks = document.querySelectorAll('.sidebar-link');
+
+        function showSection(sectionId) {
+            sections.forEach(section => {
+                section.style.display = section.id === sectionId ? 'block' : 'none';
+            });
+            
+            sidebarLinks.forEach(link => {
+                link.classList.toggle('active', link.getAttribute('data-section') === sectionId);
+            });
+        }
+
+        sidebarLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                const sectionId = link.getAttribute('data-section');
+                showSection(sectionId);
+            });
+        });
+
+        // Search functionality
+        const searchInput = document.getElementById('job-search');
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const filteredJobs = allJobs.filter(job => 
+                (job.title && job.title.toLowerCase().includes(searchTerm)) ||
+                (job.company && job.company.toLowerCase().includes(searchTerm)) ||
+                (job.location && job.location.toLowerCase().includes(searchTerm))
+            );
+            
+            document.getElementById('job-list').innerHTML = filteredJobs
+                .map(job => createJobCard(job))
+                .join('');
+            
+            lucide.createIcons();
+        });
+
+        document.addEventListener("DOMContentLoaded", () => {
+    initialize();
+});
+    </script>
+    <script src="../scriptfiles/main.js"></script>
+</body>
+</html>

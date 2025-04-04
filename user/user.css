@@ -1,0 +1,479 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background-color: #F3F4F6;
+    min-height: 100vh;
+    display: flex;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 16rem;
+    height: 100vh;
+    background-color: white;
+    box-shadow: 4px 0 6px rgba(0, 0, 0, 0.05);
+    padding: 1.5rem 1rem;
+    position: fixed;
+    left: 0;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    z-index: 50;
+}
+
+.logo-section {
+    display: flex;
+    align-items: center;
+    padding: 0 1rem 1.5rem;
+    border-bottom: 1px solid #E5E7EB;
+    margin-bottom: 1.5rem;
+}
+
+.logo-section i {
+    color: #4F46E5;
+    margin-right: 0.75rem;
+}
+
+.logo-section h1 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #111827;
+}
+
+.nav-section {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.nav-group {
+    margin-bottom: 1.5rem;
+}
+
+.nav-group-title {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #6B7280;
+    text-transform: uppercase;
+    padding: 0 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.5rem;
+    color: #4B5563;
+    text-decoration: none;
+    border-radius: 0.375rem;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.sidebar-link:hover {
+    color: #4F46E5;
+    background-color: #EEF2FF;
+}
+
+.sidebar-link.active {
+    color: #4F46E5;
+    background-color: #EEF2FF;
+}
+
+.sidebar-link span {
+    margin-left: 0.75rem;
+}
+
+.user-section {
+    padding: 1rem;
+    border-top: 1px solid #E5E7EB;
+    display: flex;
+    align-items: center;
+}
+
+.user-avatar {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background-color: #EEF2FF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.75rem;
+}
+
+.user-info {
+    flex: 1;
+}
+
+.user-name {
+    font-weight: 600;
+    color: #111827;
+    font-size: 0.875rem;
+}
+
+.user-role {
+    color: #6B7280;
+    font-size: 0.75rem;
+}
+
+/* Main Content */
+.main {
+    margin-left: 16rem;
+    padding: 2rem;
+    flex: 1;
+}
+
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.main-title {
+    font-size: 1.875rem;
+    font-weight: bold;
+    color: #111827;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border: 1px solid #E5E7EB;
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    width: 100%;
+    max-width: 24rem;
+}
+
+.search-bar i {
+    color: #6B7280;
+    margin-right: 0.75rem;
+}
+
+.search-bar input {
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: 0.875rem;
+}
+
+.job-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+}
+
+.job-card {
+    background-color: white;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: 1px solid #E5E7EB;
+}
+
+.job-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.job-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 0.5rem;
+}
+
+.job-company {
+    color: #4B5563;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+}
+
+.job-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.job-detail {
+    display: flex;
+    align-items: center;
+    font-size: 0.875rem;
+    color: #6B7280;
+}
+
+.job-detail i {
+    margin-right: 0.375rem;
+}
+
+.job-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.job-tag {
+    background-color: #EEF2FF;
+    color: #4F46E5;
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.apply-button {
+    display: inline-block;
+    background-color: #4F46E5;
+    color: white;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    transition: background-color 0.2s;
+    text-align: center;
+    width: 100%;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+}
+
+.apply-button:hover {
+    background-color: #4338CA;
+}
+
+.applied-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #D1FAE5;
+    color: #059669;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+}
+
+.applied-badge i {
+    margin-right: 0.5rem;
+}
+
+/* Profile Section */
+.profile-section {
+    background-color: white;
+    border-radius: 0.75rem;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    display: none;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.profile-avatar {
+    width: 6rem;
+    height: 6rem;
+    border-radius: 50%;
+    background-color: #EEF2FF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1.5rem;
+}
+
+.profile-info h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 0.5rem;
+}
+
+.profile-info p {
+    color: #6B7280;
+}
+
+.profile-form {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: grid;
+    gap: 0.5rem;
+}
+
+.form-group label {
+    font-weight: 500;
+    color: #374151;
+}
+
+.form-group input,
+.form-group textarea {
+    padding: 0.75rem;
+    border: 1px solid #E5E7EB;
+    border-radius: 0.5rem;
+    width: 100%;
+}
+
+/* Resume Section */
+.resume-section {
+    background-color: white;
+    border-radius: 0.75rem;
+    padding: 2rem;
+    display: none;
+}
+
+.resume-upload {
+    border: 2px dashed #E5E7EB;
+    border-radius: 0.75rem;
+    padding: 2rem;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.resume-upload i {
+    color: #6B7280;
+    margin-bottom: 1rem;
+}
+
+/* Notifications Section */
+.notifications-section {
+    display: none;
+}
+
+.notification-item {
+    background-color: white;
+    border-radius: 0.75rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.notification-icon {
+    background-color: #EEF2FF;
+    color: #4F46E5;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+}
+
+/* Settings Section */
+.settings-section {
+    background-color: white;
+    border-radius: 0.75rem;
+    padding: 2rem;
+    display: none;
+}
+
+.settings-group {
+    margin-bottom: 2rem;
+}
+
+.settings-group h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 1rem;
+}
+
+/* Help Center Section */
+.help-section {
+    display: none;
+}
+
+.help-card {
+    background-color: white;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.help-card h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 0.5rem;
+}
+
+/* Dashboard Section */
+.dashboard-section {
+    display: none;
+}
+
+.dashboard-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background-color: white;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.stat-icon {
+    background-color: #EEF2FF;
+    color: #4F46E5;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+}
+
+.stat-info h3 {
+    font-size: 1.875rem;
+    font-weight: 600;
+    color: #111827;
+}
+
+.stat-info p {
+    color: #6B7280;
+}
+
+/* Saved Jobs Section */
+.saved-jobs-section {
+    display: none;
+}
+
+/* Toast Notification */
+.toast {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background-color: #059669;
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+    opacity: 0;
+    transform: translateY(1rem);
+    transition: opacity 0.3s, transform 0.3s;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.toast i {
+    flex-shrink: 0;
+}

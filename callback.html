@@ -1,0 +1,46 @@
+<script>
+    
+    const url = window.location.href.replace('#', '&'); 
+   const finalURL = new URLSearchParams(url);
+   
+   var accessToken = finalURL.get('access_token');
+   var idToken = finalURL.get('id_token');
+   
+   if (idToken) {
+       const payload = parseJwt(idToken);
+       const groups = payload["cognito:groups"] || [];
+   
+       console.log("User Groups:", groups);
+       localStorage.clear();
+    sessionStorage.clear();
+   
+       // **Store Tokens in Local Storage**
+       localStorage.setItem("access_token", accessToken);
+       localStorage.setItem("id_token", idToken);
+   
+       // Redirect to Admin or User Home
+        if (groups.includes("admingrp")) {
+           window.location.href = `http://127.0.0.1:5500/admin/adminhome.html`;
+        } else if (groups.includes("usergrp")) {
+            window.location.href = `http://127.0.0.1:5500/user/userhome.html`;
+        }
+      else {
+           window.location.href = "http://127.0.0.1:5500/index.html";
+        }
+   } else {
+       console.error("ID Token not found.");
+       window.location.href = "http://127.0.0.1:5500/index.html";
+   }
+   
+   // JWT Decode Function
+   function parseJwt(token) {
+       try {
+           return JSON.parse(atob(token.split('.')[1]));
+       } catch (e) {
+           console.error("Invalid token format", e);
+           return {};
+       }
+   }
+   
+   
+   </script>

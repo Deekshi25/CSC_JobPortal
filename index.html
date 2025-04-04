@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Portal</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #E6E6FA;
+            min-height: 100vh;
+        }
+
+        /* Navigation Bar */
+        .nav {
+            background-color: lightgoldenrodyellow;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            z-index: 20;
+        }
+
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            height: 4rem;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .menu-button {
+            padding: 0.5rem;
+            border-radius: 0.375rem;
+            color: #4B5563;
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .menu-button:hover {
+            color: #111827;
+            background-color: #F3F4F6;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            margin-left: 1rem;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            color: #2563EB;
+            width: 2rem;
+            height: 2rem;
+        }
+
+        .logo-text {
+            margin-left: 0.5rem;
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #111827;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.375rem;
+            color: #4B5563;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .nav-link:hover {
+            color: #111827;
+            background-color: #F3F4F6;
+        }
+
+        .nav-link span {
+            margin-left: 0.5rem;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 4rem;
+            height: calc(100vh - 4rem);
+            width: 16rem;
+            background-color: white;
+            box-shadow: 4px 0 6px rgba(0, 0, 0, 0.05);
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .sidebar.open {
+            transform: translateX(0);
+        }
+
+        .sidebar-content {
+            padding: 1.5rem 1rem;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.5rem;
+            color: #4B5563;
+            text-decoration: none;
+            border-radius: 0.375rem;
+            transition: all 0.2s;
+        }
+
+        .sidebar-link:hover {
+            color: #111827;
+            background-color: #F3F4F6;
+        }
+
+        .sidebar-link span {
+            margin-left: 0.75rem;
+        }
+
+        /* Main Content */
+        .main {
+            padding-top: 4rem;
+            transition: margin-left 0.3s ease-in-out;
+        }
+
+        .main.sidebar-open {
+            margin-left: 16rem;
+        }
+
+        .main-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        .main-title {
+            font-size: 2.25rem;
+            font-weight: bold;
+            color: #111827;
+            margin-bottom: 1rem;
+        }
+
+        .main-subtitle {
+            font-size: 1.125rem;
+            color: #4B5563;
+            margin-bottom: 2rem;
+        }
+
+        .featured-jobs {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .job-card {
+            background-color: white;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .job-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .job-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 0.5rem;
+        }
+
+        .job-company {
+            color: #4B5563;
+            margin-bottom: 1rem;
+        }
+
+        .job-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .job-tag {
+            background-color: #EFF6FF;
+            color: #2563EB;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.875rem;
+        }
+
+        .job-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #6B7280;
+            font-size: 0.875rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-content">
+                <div class="nav-left">
+                    <button class="menu-button" onclick="toggleSidebar()">
+                        <i data-lucide="menu"></i>
+                    </button>
+                    <a href="index.html" class="logo">
+                        <i data-lucide="briefcase" class="logo-icon"></i>
+                        <span class="logo-text">JobPortal</span>
+                    </a>
+                </div>
+                <div class="nav-links">
+                    <a href="index.html" class="nav-link">
+                        <i data-lucide="home"></i>
+                        <span>Home</span>
+                    </a>
+                    <a href="https://us-east-1voysnbnuy.auth.us-east-1.amazoncognito.com/login?client_id=3av39d75uhosq5qfil4ocrj1a1&redirect_uri=https://127.0.0.1:5500/callback.html&response_type=token&scope=aws.cognito.signin.user.admin+email+openid+phone+profile" class="nav-link">
+                        <i data-lucide="log-in"></i>
+                        <span>Login</span>
+                    </a>
+                    <a href="contact.html" class="nav-link">
+                        <i data-lucide="phone"></i>
+                        <span>Contact</span>
+                    </a>
+                    <a href="about.html" class="nav-link">
+                        <i data-lucide="info"></i>
+                        <span>About</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-content">
+            <a href="#" class="sidebar-link">
+                <i data-lucide="briefcase"></i>
+                <span>Jobs</span>
+            </a>
+            <a href="#" class="sidebar-link">
+                <i data-lucide="users"></i>
+                <span>Companies</span>
+            </a>
+            <a href="#" class="sidebar-link">
+                <i data-lucide="file-text"></i>
+                <span>Applications</span>
+            </a>
+            <a href="#" class="sidebar-link">
+                <i data-lucide="settings"></i>
+                <span>Settings</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main" id="main">
+        <div class="main-content">
+            <h1 class="main-title">Find Your Dream Job</h1>
+            <p class="main-subtitle">Discover opportunities that match your skills and aspirations</p>
+
+            <div class="featured-jobs">
+                <!-- Sample Job Cards -->
+                <div class="job-card">
+                    <h3 class="job-title">Senior Software Engineer</h3>
+                    <p class="job-company">Tech Solutions Inc.</p>
+                    <div class="job-tags">
+                        <span class="job-tag">React</span>
+                        <span class="job-tag">Node.js</span>
+                        <span class="job-tag">TypeScript</span>
+                    </div>
+                    <div class="job-footer">
+                        <span>Full-time</span>
+                        <span>Remote</span>
+                    </div>
+                </div>
+
+                <div class="job-card">
+                    <h3 class="job-title">UX Designer</h3>
+                    <p class="job-company">Creative Studios</p>
+                    <div class="job-tags">
+                        <span class="job-tag">Figma</span>
+                        <span class="job-tag">UI/UX</span>
+                        <span class="job-tag">Prototyping</span>
+                    </div>
+                    <div class="job-footer">
+                        <span>Full-time</span>
+                        <span>On-site</span>
+                    </div>
+                </div>
+
+                <div class="job-card">
+                    <h3 class="job-title">Product Manager</h3>
+                    <p class="job-company">Innovation Labs</p>
+                    <div class="job-tags">
+                        <span class="job-tag">Agile</span>
+                        <span class="job-tag">Strategy</span>
+                        <span class="job-tag">Leadership</span>
+                    </div>
+                    <div class="job-footer">
+                        <span>Full-time</span>
+                        <span>Hybrid</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        localStorage.clear();
+sessionStorage.clear();
+
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Sidebar toggle functionality
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const main = document.getElementById('main');
+            const menuButton = document.querySelector('.menu-button');
+            
+            sidebar.classList.toggle('open');
+            main.classList.toggle('sidebar-open');
+            
+            // Change menu icon
+            const icon = menuButton.querySelector('i');
+            if (sidebar.classList.contains('open')) {
+                icon.setAttribute('data-lucide', 'x');
+            } else {
+                icon.setAttribute('data-lucide', 'menu');
+            }
+            lucide.createIcons();
+        }
+    </script>
+</body>
+</html>

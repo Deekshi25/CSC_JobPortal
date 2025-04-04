@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobPortal Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <!-- Navigation Bar -->
+    <nav class="bg-white shadow">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-8 w-8 text-blue-600">
+                        <rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                    </svg>
+                    <span class="ml-2 text-xl font-bold text-gray-900">JobPortal Admin</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center space-x-2 text-gray-600">
+                        <div class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                            </svg>
+                        </div>
+                        <span>Admin</span>
+                    </div>
+                    <button onclick="handleLogout()" class="flex items-center space-x-1 px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
+                        </svg>
+                        <span>Logout</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto py-6 px-4">
+        <!-- Stats Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            <div class="bg-white rounded-lg shadow p-6">
+                <h3 class="text-sm font-medium text-gray-500">Total Jobs</h3>
+                <p id="totalJobs" class="text-3xl font-bold text-gray-900">0</p>
+            </div>
+            <div class="bg-white rounded-lg shadow p-6">
+                <h3 class="text-sm font-medium text-gray-500">Active Jobs</h3>
+                <p id="activeJobs" class="text-3xl font-bold text-gray-900">0</p>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="flex space-x-4 mb-6">
+            <button onclick="switchTab('jobs')" class="tab px-4 py-2 rounded-md bg-blue-600 text-white flex items-center space-x-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                </svg>
+                <span>Manage Jobs</span>
+            </button>
+        </div>
+
+        <!-- Job Management Section -->
+        <div id="jobsSection">
+            <button onclick="showJobForm()" class="mb-4 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 flex items-center space-x-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                </svg>
+                <span>Add Job</span>
+            </button>
+
+            <!-- Job Form Modal -->
+            <div id="jobFormModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                <div class="bg-white p-6 rounded-lg w-full max-w-md">
+                    <h2 class="text-xl font-bold mb-4">Add New Job</h2>
+                    <form id="jobForm">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Title</label>
+                                <input type="text" id="jobTitle" required
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Company</label>
+                                <input type="text" id="jobCompany" required
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Location</label>
+                                <input type="text" id="jobLocation" required
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Status</label>
+                                <select id="jobStatus"
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    <option value="active">Active</option>
+                                    <option value="inactive">Closed</option>
+                                </select>
+                            </div><p id="responseMessage" class="text-red-500 mt-2"></p>
+
+                        </div>
+                        <div class="mt-6 flex space-x-3">
+                            <button type="submit"
+                                class="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700">
+                                Add Job
+                            </button>
+                            <button type="button" onclick="hideJobForm()"
+                                class="flex-1 bg-gray-200 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-300">
+                                Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Jobs List -->
+            <div id="jobsList" class="bg-white p-6 rounded-lg shadow">
+                <div class="space-y-4">
+                    <!-- Jobs will be dynamically inserted here -->
+                </div>
+            </div>
+        </div>
+        <div id="jobsList"></div>
+         
+
+    </main>
+
+    <script src="adminhome.js"></script>
+</body>
+</html>
+
+    
+    
+  

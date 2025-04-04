@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Job Portal</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #E6E6FA;
+            min-height: 100vh;
+        }
+
+        /* Navigation Bar */
+        .nav {
+            background-color: lightgoldenrodyellow;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            width: 100%;
+        }
+
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            height: 4rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            color: #2563EB;
+            width: 2rem;
+            height: 2rem;
+        }
+
+        .logo-text {
+            margin-left: 0.5rem;
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #111827;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.375rem;
+            color: #4B5563;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .nav-link:hover {
+            color: #111827;
+            background-color: #F3F4F6;
+        }
+
+        .nav-link span {
+            margin-left: 0.5rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 3rem 1rem;
+        }
+
+        .about-section {
+            background-color: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .about-title {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #111827;
+            margin-bottom: 1rem;
+        }
+
+        .about-subtitle {
+            font-size: 1.25rem;
+            color: #4B5563;
+            margin-bottom: 2rem;
+        }
+
+        .about-text {
+            color: #6B7280;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background-color: white;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon {
+            color: #2563EB;
+            width: 2.5rem;
+            height: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-text {
+            color: #6B7280;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-content">
+                <a href="index.html" class="logo">
+                    <i data-lucide="briefcase" class="logo-icon"></i>
+                    <span class="logo-text">JobPortal</span>
+                </a>
+                <div class="nav-links">
+                    <a href="index.html" class="nav-link">
+                        <i data-lucide="home"></i>
+                        <span>Home</span>
+                    </a>
+                    <a href="login.html" class="nav-link">
+                        <i data-lucide="log-in"></i>
+                        <span>Login</span>
+                    </a>
+                    <a href="contact.html" class="nav-link">
+                        <i data-lucide="phone"></i>
+                        <span>Contact</span>
+                    </a>
+                    <a href="about.html" class="nav-link">
+                        <i data-lucide="info"></i>
+                        <span>About</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <section class="about-section">
+            <h1 class="about-title">About JobPortal</h1>
+            <p class="about-subtitle">Connecting talent with opportunity</p>
+            <p class="about-text">
+                JobPortal is a leading job search platform dedicated to bridging the gap between talented professionals and innovative companies. Our mission is to make the job search process more efficient, transparent, and successful for both job seekers and employers.
+            </p>
+            <p class="about-text">
+                Founded in 2025, we've helped thousands of professionals find their dream jobs and assisted companies in building strong teams. Our platform combines cutting-edge technology with a human-centered approach to create meaningful connections in the job market.
+            </p>
+        </section>
+
+        <div class="features">
+            <div class="feature-card">
+                <i data-lucide="search" class="feature-icon"></i>
+                <h3 class="feature-title">Smart Job Matching</h3>
+                <p class="feature-text">Our advanced algorithms match your skills and preferences with the perfect job opportunities.</p>
+            </div>
+
+            <div class="feature-card">
+                <i data-lucide="users" class="feature-icon"></i>
+                <h3 class="feature-title">Company Insights</h3>
+                <p class="feature-text">Get detailed information about companies, their culture, and work environment.</p>
+            </div>
+
+            <div class="feature-card">
+                <i data-lucide="trending-up" class="feature-icon"></i>
+                <h3 class="feature-title">Career Growth</h3>
+                <p class="feature-text">Access resources and tools to help you advance in your career journey.</p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>
