@@ -20,16 +20,16 @@
    
        // Redirect to Admin or User Home
         if (groups.includes("admingrp")) {
-           window.location.href = `http://127.0.0.1:5500/admin/adminhome.html`;
+           window.location.href = `https://master.dlxg3cfd1x67s.amplifyapp.com/adminhome.html`;
         } else if (groups.includes("usergrp")) {
-            window.location.href = `http://127.0.0.1:5500/user/userhome.html`;
+            window.location.href = `https://master.dlxg3cfd1x67s.amplifyapp.com/userhome.html`;
         }
       else {
-           window.location.href = "http://127.0.0.1:5500/index.html";
+           window.location.href = "https://master.dlxg3cfd1x67s.amplifyapp.com/";
         }
    } else {
        console.error("ID Token not found.");
-       window.location.href = "http://127.0.0.1:5500/index.html";
+       window.location.href = "https://master.dlxg3cfd1x67s.amplifyapp.com/";
    }
    
    // JWT Decode Function
