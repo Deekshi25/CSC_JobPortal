@@ -1,0 +1,64 @@
+import json
+import boto3
+import uuid
+
+# Initialize DynamoDB
+dynamodb = boto3.resource('dynamodb')
+jobs_table = dynamodb.Table('jobtable')
+
+def lambda_handler(event, context):
+    try:
+        print("Received event:", json.dumps(event))  # Debugging logs
+
+        # Ensure event['body'] is parsed correctly
+        body = event.get('body', '{}')
+
+        # If body is already a dictionary, no need to parse it
+        if isinstance(body, dict):
+            parsed_body = body
+        else:
+            parsed_body = json.loads(body)
+
+        # Generate a unique job ID
+        jobid = str(uuid.uuid4())
+
+        # Validate required fields
+        required_fields = ["title", "company", "location", "status"]
+        for field in required_fields:
+            if field not in parsed_body:
+                return {
+                    'statusCode': 400,
+                    'body': json.dumps({'error': f"Missing required field: {field}"})
+                }
+
+        # Ensure status is either "active" or "closed"
+        status = parsed_body.get('status', 'active')
+        if status not in ['active', 'closed']:
+            return {
+                'statusCode': 400,
+                'body': json.dumps({'error': "Invalid status. Must be 'active' or 'closed'."})
+            }
+
+        # Construct the job item
+        job_item = {
+            'jobid': jobid,  # Always use generated UUID
+            'title': parsed_body['title'],
+            'company': parsed_body['company'],
+            'location': parsed_body['location'],
+            'status': status
+        }
+
+        # Insert the job into DynamoDB
+        jobs_table.put_item(Item=job_item)
+
+        return {
+            'statusCode': 200,
+            'body': json.dumps({'message': 'Job added successfully', 'jobid': jobid})
+        }
+
+    except Exception as e:
+        print("Error:", str(e))  # Log error in CloudWatch
+        return {
+            'statusCode': 500,
+            'body': json.dumps({'error': str(e)})
+        }

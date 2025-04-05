@@ -1,0 +1,58 @@
+import json
+import boto3
+from datetime import datetime
+
+created_at = datetime.utcnow().isoformat()
+
+dynamodb = boto3.resource('dynamodb')
+table = dynamodb.Table('usertable')
+
+USER_POOL_ID = "us-east-1_VOYsnBNUy"
+DEFAULT_GROUP = "usergrp"
+
+cognito_client = boto3.client("cognito-idp")
+
+def lambda_handler(event, context):
+    print("Received event:", json.dumps(event, indent=2))
+
+    # Ensure required keys exist
+    if "request" not in event or "userAttributes" not in event["request"]:
+        print("Missing 'request' or 'userAttributes' in event.")
+        return {"status": "error", "message": "Invalid event structure"}
+
+    user_attributes = event["request"]["userAttributes"]
+    username = event.get("userName", "N/A")
+    user_pool_id = event.get("userPoolId", USER_POOL_ID)  # Use default if missing
+
+    # Add user to the Cognito group
+    try:
+        cognito_client.admin_add_user_to_group(
+            UserPoolId=user_pool_id,
+            Username=username,
+            GroupName=DEFAULT_GROUP
+        )
+    except Exception as e:
+        print(f"Error adding user to group: {str(e)}")
+
+    # Extract user details
+    email = user_attributes.get("email")
+    name = user_attributes.get("name", "N/A")
+
+    if not email:
+        print("No email found in user attributes, skipping DynamoDB insertion.")
+        return event  # Return event to avoid breaking Cognito flow
+
+    # Insert user details into DynamoDB
+    try:
+        table.put_item(
+            Item={
+                "email": email,
+                "name": name,
+                "created_at": created_at
+            }
+        )
+        print(f"User {email} added to DynamoDB successfully.")
+    except Exception as e:
+        print(f"Error inserting user {email}: {str(e)}")
+
+    return event  # Return event to Cognito

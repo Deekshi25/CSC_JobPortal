@@ -1,0 +1,52 @@
+import json
+import boto3
+import uuid
+from datetime import datetime
+
+dynamodb = boto3.resource('dynamodb')
+table = dynamodb.Table('savedjobs')
+
+def lambda_handler(event, context):
+    try:
+        print("Received event:", json.dumps(event))  # Debugging log
+
+        # Ensure body is correctly parsed
+        body = event.get("body", "{}")
+        if isinstance(body, str):
+            body = json.loads(body)  # Convert string to JSON if needed
+
+        # Fix: Handle nested body issue
+        if "body" in body:
+            body = json.loads(body["body"])  # Extract actual payload
+
+        if "jobid" not in body or "name" not in body:
+            return {
+                "statusCode": 400,
+                "headers": {"Access-Control-Allow-Origin": "*"},
+                "body": json.dumps({"error": "Missing jobid or name"}),
+            }
+
+        save_id = str(uuid.uuid4())
+        saved_at = datetime.utcnow().isoformat()
+
+        table.put_item(
+            Item={
+                "save_id": save_id,
+                "jobid": body["jobid"],
+                "name": body["name"],
+                "saved_at": saved_at,
+            }
+        )
+
+        return {
+            "statusCode": 200,
+            "headers": {"Access-Control-Allow-Origin": "*"},
+            "body": json.dumps({"message": "Job saved successfully!"}),
+        }
+
+    except Exception as e:
+        return {
+            "statusCode": 500,
+            "headers": {"Access-Control-Allow-Origin": "*"},
+            "body": json.dumps({"error": str(e)}),
+        }

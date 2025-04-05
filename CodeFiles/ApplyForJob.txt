@@ -1,0 +1,100 @@
+import json
+import boto3
+import uuid
+from datetime import datetime
+
+dynamodb = boto3.resource("dynamodb")
+ses = boto3.client("ses")  # Initialize SES client
+
+# DynamoDB table name
+table = dynamodb.Table("jobapplications")
+
+# Admin email
+ADMIN_EMAIL = "deekshithanarasimhaswami2004@gmail.com"
+
+def send_email_notification(name, jobid, company, title):
+    """Send an email notification to the admin when a new job application is submitted."""
+    subject = "New Job Application Submitted"
+    body_text = f"""
+    A new job application has been submitted.
+
+    Applicant Name: {name}
+    Job ID: {jobid}
+    Job Title: {title}
+    Company: {company}
+
+    Please review the application in the system.
+    """
+    
+    try:
+        ses.send_email(
+            Source=ADMIN_EMAIL,
+            Destination={"ToAddresses": [ADMIN_EMAIL]},
+            Message={
+                "Subject": {"Data": subject},
+                "Body": {"Text": {"Data": body_text}}
+            }
+        )
+        print("Email sent successfully to admin")
+    except Exception as e:
+        print(f"Error sending email: {str(e)}")
+
+def lambda_handler(event, context):
+    try:
+        print("Received event:", json.dumps(event))  # Debugging log
+
+        # Ensure the body is correctly parsed
+        body = event.get("body", "{}")
+        if isinstance(body, str):  
+            body = json.loads(body)  # Convert string to JSON if needed
+        
+        # Fix: Handle double-wrapped body
+        if "body" in body:
+            body = json.loads(body["body"])  # Extract actual payload
+        
+        jobid = body.get("jobid")
+        name = body.get("name")
+        company = body.get("company")
+        location = body.get("location")
+        status = body.get("status")
+        title = body.get("title")
+
+        if not jobid or not name:
+            return {
+                "statusCode": 400,
+                "headers": {"Access-Control-Allow-Origin": "*"},
+                "body": json.dumps({"error": "Missing jobid or name"})
+            }
+
+        application_id = str(uuid.uuid4())
+        applied_at = datetime.utcnow().isoformat()
+
+        # Store application details in DynamoDB
+        table.put_item(
+            Item={
+                "application_id": application_id,
+                "jobid": jobid,
+                "name": name,
+                "company": company,
+                "location": location,
+                "status": status,
+                "title": title,
+                "applied_at": applied_at,
+            }
+        )
+
+        # Send email notification to the admin
+        send_email_notification(name, jobid, company, title)
+
+        return {
+            "statusCode": 200,
+            "headers": {"Access-Control-Allow-Origin": "*"},
+            "body": json.dumps({"message": "Application submitted successfully!"}),
+        }
+
+    except Exception as e:
+        return {
+            "statusCode": 500,
+            "headers": {"Access-Control-Allow-Origin": "*"},
+            "body": json.dumps({"error": str(e)}),
+        }

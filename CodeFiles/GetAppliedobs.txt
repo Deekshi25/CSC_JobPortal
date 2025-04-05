@@ -1,0 +1,28 @@
+import json
+import boto3
+
+dynamodb = boto3.resource('dynamodb')
+table = dynamodb.Table('jobapplications')
+
+def lambda_handler(event, context):
+    try:
+        user_name = event['queryStringParameters']['name']
+
+        response = table.scan(
+            FilterExpression="#nameAttr = :nameValue",
+            ExpressionAttributeNames={"#nameAttr": "name"},
+            ExpressionAttributeValues={":nameValue": user_name}
+        )
+
+        return {
+            'statusCode': 200,
+            'headers': {"Access-Control-Allow-Origin": "*"},
+            'body': json.dumps(response['Items'])
+        }
+    
+    except Exception as e:
+        return {
+            'statusCode': 500,
+            'headers': {"Access-Control-Allow-Origin": "*"},
+            'body': json.dumps({'error': str(e)})
+        }

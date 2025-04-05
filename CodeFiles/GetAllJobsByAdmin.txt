@@ -1,0 +1,34 @@
+import json
+import boto3
+
+# Initialize the DynamoDB client
+dynamodb = boto3.resource("dynamodb")
+TABLE_NAME = "jobtable"  # Change this to your actual table name
+table = dynamodb.Table(TABLE_NAME)
+
+def lambda_handler(event, context):
+    try:
+        # Scan the table to retrieve all items
+        response = table.scan()
+        jobs = response.get("Items", [])
+
+        return {
+            "statusCode": 200,
+            "headers": {
+                "Content-Type": "application/json"
+            },
+            "body": json.dumps({
+                "message": "Jobs retrieved successfully",
+                "jobs": jobs
+            })
+        }
+
+    except Exception as e:
+        print("Error fetching jobs:", str(e))
+        return {
+            "statusCode": 500,
+            "body": json.dumps({
+                "message": "Failed to retrieve jobs",
+                "error": str(e)
+            })
+        }

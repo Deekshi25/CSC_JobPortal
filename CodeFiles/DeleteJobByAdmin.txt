@@ -1,0 +1,62 @@
+import json
+import boto3
+import logging
+
+# Initialize logging
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+
+# Initialize DynamoDB client
+dynamodb = boto3.resource("dynamodb")
+table = dynamodb.Table("jobtable")  # Ensure this matches your actual DynamoDB table name
+
+def lambda_handler(event, context):
+    try:
+        logger.info(f"Received event: {json.dumps(event)}")
+
+        # ✅ Extract jobId from queryStringParameters (not body)
+        jobid = event.get("queryStringParameters", {}).get("jobId")
+
+        if not jobid:
+            return {
+                "statusCode": 400,
+                "headers": get_cors_headers(),  # ✅ Always include CORS headers
+                "body": json.dumps({"message": "Job ID is required"})
+            }
+
+        logger.info(f"Deleting job with jobId: {jobid}")
+
+        # ✅ Delete the job using jobid (Partition Key)
+        response = table.delete_item(
+            Key={"jobid": jobid}
+        )
+
+        # ✅ Check if deletion was successful
+        if response.get("ResponseMetadata", {}).get("HTTPStatusCode") == 200:
+            return {
+                "statusCode": 200,
+                "headers": get_cors_headers(),  # ✅ Always include CORS headers
+                "body": json.dumps({"message": f"Job {jobid} deleted successfully"})
+            }
+
+        return {
+            "statusCode": 500,
+            "headers": get_cors_headers(),  # ✅ Always include CORS headers
+            "body": json.dumps({"message": "Failed to delete job"})
+        }
+
+    except Exception as e:
+        logger.error(f"Error deleting job: {str(e)}", exc_info=True)
+        return {
+            "statusCode": 500,
+            "headers": get_cors_headers(),  # ✅ Always include CORS headers
+            "body": json.dumps({"message": "Error deleting job", "error": str(e)}),
+        }
+
+def get_cors_headers():
+    """Returns common CORS headers"""
+    return {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "OPTIONS, GET",
+        "Access-Control-Allow-Headers": "Content-Type"
+    }
