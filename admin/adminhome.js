@@ -17,7 +17,7 @@ function handleLogout() {
     localStorage.removeItem("access_token");
     localStorage.removeItem("id_token");
     localStorage.clear();
-    window.location.href = "http://127.0.0.1:5500/index.html";
+    window.location.href = "https://us-east-1voysnbnuy.auth.us-east-1.amazoncognito.com/logout?client_id=3av39d75uhosq5qfil4ocrj1a1&response_type=token&scope=aws.cognito.signin.user.admin+email+openid+phone+profile&redirect_uri=https%3A%2F%2Fmaster.dlxg3cfd1x67s.amplifyapp.com%2Fcallback.html";
 }
 
 // Job Management Functions
