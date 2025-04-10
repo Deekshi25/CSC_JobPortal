@@ -359,52 +359,52 @@ function renderAppliedJobs() {
 }
 
         // Fetch all jobs
-//         async function fetchJobs() {
-//             try {
-//                 const response = await fetch(`${apiBaseUrl}/admin/getAllJobs`);
-//                 const data = await response.json();
-//                 if (!data.body) {
-//                     console.warn('Received empty body from API');
-//                     allJobs = [];
-//                 } else {
-//                     try {
-//                         const parsedData = JSON.parse(data.body);
-//                         allJobs = parsedData.jobs || [];
-//                     } catch (parseError) {
-//                         console.error('Error parsing JSON:', parseError);
-//                         allJobs = [];
-//                     }
-//                 }
-//                 updateJobCounts(allJobs.length, appliedJobs.length, savedJobs.length);
-//                 return allJobs;
-//             } catch (error) {
-//                 console.error('Error fetching jobs:', error);
-//                 showToast('Failed to load jobs');
-//                 return [];
-//             }
-//         }
+        async function fetchJobs() {
+            try {
+                const response = await fetch(`${apiBaseUrl}/admin/getAllJobs`);
+                const data = await response.json();
+                if (!data.body) {
+                    console.warn('Received empty body from API');
+                    allJobs = [];
+                } else {
+                    try {
+                        const parsedData = JSON.parse(data.body);
+                        allJobs = parsedData.jobs || [];
+                    } catch (parseError) {
+                        console.error('Error parsing JSON:', parseError);
+                        allJobs = [];
+                    }
+                }
+                updateJobCounts(allJobs.length, appliedJobs.length, savedJobs.length);
+                return allJobs;
+            } catch (error) {
+                console.error('Error fetching jobs:', error);
+                showToast('Failed to load jobs');
+                return [];
+            }
+        }
 
-//         // Fetch user's applied jobs
-//         async function fetchAppliedJobs() {
-//     try {
-//         console.log(userName);
-//         const response = await fetch(`${apiBaseUrl}/user/getAppliedJobs?name=${userName}`);
-//         console.log(response);
+        // Fetch user's applied jobs
+        async function fetchAppliedJobs() {
+    try {
+        console.log(userName);
+        const response = await fetch(`${apiBaseUrl}/user/getAppliedJobs?name=${userName}`);
+        console.log(response);
 
-//         const data = await response.json(); // Parse JSON response
-//         console.log("API Response Data:", data); // Debugging log
+        const data = await response.json(); // Parse JSON response
+        console.log("API Response Data:", data); // Debugging log
 
-//         // Use data directly, assuming it's already JSON
-//         appliedJobs = data.jobs || [];
+        // Use data directly, assuming it's already JSON
+        appliedJobs = data.jobs || [];
 
-//         updateJobCounts(allJobs.length, appliedJobs.length, savedJobs.length);
-//         return appliedJobs;
-//     } catch (error) {
-//         console.error('Error fetching applied jobs:', error);
-//         showToast('Failed to load applied jobs');
-//         return [];
-//     }
-// }
+        updateJobCounts(allJobs.length, appliedJobs.length, savedJobs.length);
+        return appliedJobs;
+    } catch (error) {
+        console.error('Error fetching applied jobs:', error);
+        showToast('Failed to load applied jobs');
+        return [];
+    }
+}
 
 
 async function applyForJob(job) {
