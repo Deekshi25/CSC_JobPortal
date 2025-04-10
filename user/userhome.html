@@ -514,31 +514,31 @@ async function applyForJob(job) {
             renderJobs();
         }
 
-        // Render jobs
-        // function renderJobs() {
-        //     const jobList = document.getElementById('job-list');
-        //     const appliedJobsList = document.getElementById('applied-jobs-list');
-        //     const savedJobsList = document.getElementById('saved-jobs-list');
+       // Render jobs
+        function renderJobs() {
+            const jobList = document.getElementById('job-list');
+            const appliedJobsList = document.getElementById('applied-jobs-list');
+            const savedJobsList = document.getElementById('saved-jobs-list');
 
-        //     // Render all jobs
-        //     jobList.innerHTML = allJobs.map(job => createJobCard(job)).join('');
+            // Render all jobs
+            jobList.innerHTML = allJobs.map(job => createJobCard(job)).join('');
 
-        //     appliedJobsList.innerHTML = appliedJobs.map(job => createJobCard(job)).join('');
-        //     // Render applied jobs
-        //     appliedJobsList.innerHTML = allJobs
-        //         .filter(job => appliedJobs.includes(job.jobid))
-        //         .map(job => createJobCard(job))
-        //         .join('');
+            appliedJobsList.innerHTML = appliedJobs.map(job => createJobCard(job)).join('');
+            // Render applied jobs
+            appliedJobsList.innerHTML = allJobs
+                .filter(job => appliedJobs.includes(job.jobid))
+                .map(job => createJobCard(job))
+                .join('');
 
-        //     // Render saved jobs
-        //     savedJobsList.innerHTML = allJobs
-        //         .filter(job => savedJobs.includes(job.jobid))
-        //         .map(job => createJobCard(job))
-        //         .join('');
+            // Render saved jobs
+            savedJobsList.innerHTML = allJobs
+                .filter(job => savedJobs.includes(job.jobid))
+                .map(job => createJobCard(job))
+                .join('');
 
-        //     // Reinitialize Lucide icons
-        //     lucide.createIcons();
-        // }
+            // Reinitialize Lucide icons
+            lucide.createIcons();
+        }
       // Notifications
 
 
